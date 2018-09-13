@@ -1,0 +1,46 @@
+---
+- name: Install aria2
+  dnf:
+    name: aria2
+    state: present
+
+- name: Copy service file
+  template:
+    src: aria2c.service.j2
+    dest: /etc/systemd/system/aria2c.service
+    owner: root
+    group: root
+
+- name: Create configuration directory
+  file:
+    path: "{{ config_dir }}"
+    state: directory
+    owner: "{{ running_user }}"
+    group: "{{ running_user }}"
+    recurse: yes
+
+- name: Copy configuration file
+  template:
+    src: aria2.conf.j2
+    dest: "{{ config_dir }}/aria2c.conf"
+    owner: "{{ running_user }}"
+    group: "{{ running_user }}"
+
+- name: Start and enable service
+  systemd:
+    name: aria2c
+    daemon_reload: yes
+    enabled: yes
+    state: started
+
+- name: Install web-ui
+  docker_container:
+    name: webui_aria2
+    image: timonier/webui-aria2
+    state: started
+    env:
+      RCP_HOST: "172.17.0.1"
+    ports:
+      - "8080:80"
+    restart_policy: always
+

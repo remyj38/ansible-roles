@@ -1,0 +1,13 @@
+[Unit]
+Description=Aria2
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/aria2c --conf-path={{ config_dir }}/aria2c.conf
+User={{ running_user }}
+StandardOutput=syslog
+StandardError=syslog
+
+[Install]
+WantedBy=multi-user.target

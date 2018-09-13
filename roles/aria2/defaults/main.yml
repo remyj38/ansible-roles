@@ -1,0 +1,4 @@
+---
+config_dir: /home/remy/.config/aria2/
+default_download_dir: /home/remy/Téléchargements
+running_user: remy

@@ -1,0 +1,14 @@
+image: docker:latest
+
+services:
+  - docker:dind
+
+stages:
+  - tests
+
+test-workstation:
+  stage: tests
+  script:
+    - docker run -d --privileged --name fedora-ansible -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v `pwd`:/ansible remyj38/fedora-ansible
+    - docker exec fedora-ansible pip install docker-py
+    - docker exec fedora-ansible ansible-playbook workstation.yml
