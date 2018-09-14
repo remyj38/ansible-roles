@@ -10,5 +10,5 @@ test-workstation:
   stage: tests
   script:
     - docker run -d --privileged --name fedora-ansible -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v `pwd`:/ansible remyj38/fedora-ansible
-    - docker exec fedora-ansible pip install docker-py
-    - docker exec fedora-ansible ansible-playbook workstation.yml
+    - docker exec fedora-ansible useradd -m -d /home/remy/ remy
+    - docker exec fedora-ansible ansible-playbook /ansible/workstation.yml

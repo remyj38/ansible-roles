@@ -1,0 +1,14 @@
+---
+- name: Upgrading system
+  dnf:
+    name: "*"
+    state: latest
+
+- name: Install prerequisites from repository
+  dnf:
+    name: python-libselinux
+    state: present
+
+- name: Install prerequisites from pypi
+  pip:
+    name: docker-py

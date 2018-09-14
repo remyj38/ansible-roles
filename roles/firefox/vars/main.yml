@@ -1,0 +1,2 @@
+---
+download_url: https://download.mozilla.org/?product=firefox-{{ channel }}-ssl&os=linux64&lang={{ language }}

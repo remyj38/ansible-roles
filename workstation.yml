@@ -1,5 +1,15 @@
 ---
 - hosts: localhost
   user: root
-  roles:
-    - aria2
+  tasks:
+    - include_role:
+        name: prerequisites
+    - include_role:
+        name: aria2
+    - include_role:
+        name: firefox
+    - include_role:
+        name: firefox
+      vars:
+        install_path: /opt/firefox-developer
+        channel: devedition-latest

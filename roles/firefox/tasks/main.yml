@@ -1,0 +1,43 @@
+---
+- name: Remove other version from repository
+  dnf:
+    name: "firefox*"
+    state: absent
+
+- name: Install dependencies
+  dnf:
+    name:
+      - tar
+      - bzip2
+    state: present
+
+- name: Create temporary directory
+  command: mktemp -d
+  register: tmp_dir
+
+- name: Download and extract Firefox
+  unarchive:
+    src: "{{ download_url }}"
+    dest: "{{ tmp_dir.stdout }}"
+    remote_src: yes
+
+- name: Clear destination directory
+  file:
+    path: "{{ install_path }}"
+    state: absent
+
+- name: Move Firefox to {{ install_path }}
+  command: "mv {{ tmp_dir.stdout }}/firefox/ {{ install_path }}"
+
+- name: Change permissions of "{{ install_path }}"
+  file:
+    path: "{{ install_path }}"
+    mode: +w
+    recurse: yes
+
+- name: Create shortcut
+  template:
+    src: firefox.desktop.j2
+    dest: /usr/share/applications
+    owner: root
+    group: root
