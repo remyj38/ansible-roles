@@ -13,3 +13,5 @@
       vars:
         install_path: /opt/firefox-developer
         channel: devedition-latest
+    - include_role:
+        name: megasync
