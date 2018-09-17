@@ -1,0 +1,46 @@
+- name: Install codecs
+  dnf:
+    name:
+      - gstreamer1
+      - gstreamer1-plugins-base
+      - gstreamer1-plugins-good
+      - gstreamer1-plugins-bad-free
+      - gstreamer1-plugins-ugly
+      - ffmpeg
+      - flac
+
+- name: Install VLC
+  dnf:
+    name: vlc
+    state: present
+  when: install_vlc
+
+- name: Install Kodi
+  dnf:
+    name: kodi
+    state: present
+  when: install_kodi
+
+- name: Install Spotify repository
+  get_url:
+    url: https://negativo17.org/repos/fedora-spotify.repo
+    dest: /etc/yum.repos.d/fedora-spotify.repo
+    owner: root
+    group: root
+    mode: 0644
+  when: install_spotify
+
+- name: Install Spotify
+  dnf:
+    name: spotify-client
+    state: present
+
+- name: Install rhythmbox-alternative-toolbar
+  dnf:
+    name: rhythmbox-alternative-toolbar
+    state: present
+
+- name: Install youtube-dl
+  dnf:
+    name: youtube-dl
+    state: present

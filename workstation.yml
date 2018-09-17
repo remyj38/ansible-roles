@@ -4,14 +4,89 @@
   tasks:
     - include_role:
         name: prerequisites
+
     - include_role:
         name: aria2
+
     - include_role:
         name: firefox
+
     - include_role:
         name: firefox
       vars:
         install_path: /opt/firefox-developer
         channel: devedition-latest
+
     - include_role:
         name: megasync
+
+    - include_role:
+        name: multimedia
+
+    - include_role:
+        name: development
+
+    - name: Install tools
+      dnf:
+        name:
+          - aspell-fr
+          - bash-completion
+          - dconf-editor
+          - firewall-config
+          - gconf-editor
+          - gnome-tweaks
+          - hplip
+          - iftop
+          - iotop
+          - jq
+          - lm_sensors
+          - mutt
+          - net-tools
+          - nethogs
+          - nmap
+          - nmap-frontend
+          - ntp
+          - smartmontools
+          - usbutils
+          - vim
+          - wireshark-gtk
+          - zsh
+        state: present
+
+    - name: Install Signal repository
+      get_url:
+        url: https://copr.fedorainfracloud.org/coprs/luminoso/Signal-Desktop/repo/fedora-{{ hostvars[inventory_hostname].ansible_distribution_major_version }}/luminoso-Signal-Desktop-fedora-{{ hostvars[inventory_hostname].ansible_distribution_major_version }}.repo
+        dest: /etc/yum.repos.d/_copr_luminoso-Signal-Desktop.repo
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: Install softwares
+      dnf:
+        name:
+          - evolution-ews
+          - feedreader
+          - gedit-plugins
+          - gimp
+          - grisbi
+          - inkscape
+          - keepass
+          - krita
+          - libreoffice
+          - libreoffice-langpack-fr
+          - nextcloud-client
+          - qbittorrent
+          - remmina
+          - signal-desktop
+          - transmission-remote-gtk
+
+    - name: Install yubiko softwares
+      dnf:
+        name:
+          - libu2f-host
+          - libu2f-server
+          - pam_yubico
+          - pamu2fcfg
+          - yubikey-personalization-gui
+          - yubioath-desktop
+        state: present

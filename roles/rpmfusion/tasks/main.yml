@@ -1,0 +1,10 @@
+---
+- name: Install RPM Fusion Free
+  dnf:
+    name: "{{ rpm_url_free }}"
+    state: present
+- name: Install RPM Fusion Nonfree
+  dnf:
+    name: "{{ rpm_url_nonfree }}"
+    state: present
+  when: install_nonfree

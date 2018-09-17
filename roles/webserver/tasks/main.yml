@@ -1,0 +1,92 @@
+---
+- name: Install MariaDB server
+  dnf:
+    name: mariadb-server
+    state: present
+
+- name: Configure MariaDB
+  lineinfile:
+    path: /etc/my.cnf.d/mariadb-server.cnf
+    regexp: 'datadir='
+    line: 'datadir=/home/mysql'
+
+- name: Install httpd
+  dnf:
+    name:
+      - httpd
+      - httpd-itk
+      - mod_ssl
+    state: present
+
+- name: Configure httpd
+  copy:
+    src: httpd.conf
+    dest: /etc/httpd/conf/httpd.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Configure httpd itk module
+  lineinfile:
+    path: /etc/httpd/conf.modules.d/00-mpm-itk.conf
+    regexp: 'LoadModule'
+    line: 'LoadModule mpm_itk_module modules/mod_mpm_itk.so'
+
+- name: Configure httpd vhosts
+  copy:
+    src: vhosts
+    dest: /etc/httpd/vhosts
+    owner: root
+    group: root
+
+- name: Install php
+  dnf:
+    name:
+      - ImageMagick
+      - php
+      - php-gd
+      - php-intl
+      - php-mysqlnd
+      - php-pecl-imagick
+      - php-pecl-xdebug
+      - php-symfony
+    state: present
+
+- name: Configure php
+  lineinfile:
+    path: /etc/php.ini
+    regexp: '^date\.timezone ='
+    line: 'date.timezone = Europe/Paris'
+
+- name: Install phpMyAdmin
+  dnf:
+    name: phpMyAdmin
+    state: present
+
+- name: Generate blowfish secret for phpMyAdmin
+  command: openssl rand -hex 32
+  register: blowfish_secret
+
+- name: Configure phpMyAdmin
+  template:
+    src: phpmyadmin.conf
+    dest: /etc/phpMyAdmin/config.inc.php
+    owner: root
+    group: apache
+    mode: 0640
+
+- name: Install postfix
+  dnf:
+    name: postfix
+    state: present
+
+- name: Configure postfix
+  lineinfile:
+    path: /etc/postfix/main.cf
+    regexp: 'relayhost = '
+    line: 'relayhost = {{ postfix_relay }}'
+
+- name: Install composer
+  dnf:
+    name: composer
+    state: present

@@ -1,0 +1,48 @@
+---
+- name: Install Development tools
+  dnf:
+    name: "@Development tools"
+    state: present
+
+- name: Install prerequisites
+  dnf:
+    name:
+    - golang
+    - kernel-headers
+    - hugo
+
+- name: Install Git
+  dnf:
+    name:
+      - git
+      - git-gui
+      - gitg
+
+- name: Configure Pycharm repo
+  get_url:
+    url: "https://copr.fedorainfracloud.org/coprs/phracek/PyCharm/repo/fedora-{{ hostvars[inventory_hostname].ansible_distribution_major_version }}/phracek-PyCharm-fedora-{{ hostvars[inventory_hostname].ansible_distribution_major_version }}.repo"
+    dest: /etc/yum.repos.d/_copr_phracek-PyCharm.repo
+    owner: root
+    group: root
+
+- name: Install Pycharm
+  dnf:
+    name: pycharm-community
+    state: present
+
+- name: Download Atom
+  get_url:
+    url: https://atom.io/download/rpm
+    dest: /tmp/atom.rpm
+
+- name: Install Atom
+  dnf:
+    name: /tmp/atom.rpm
+    state: present
+
+- name: Install android tools
+  dnf:
+    name:
+      - android-tools
+      - adb
+    state: present
