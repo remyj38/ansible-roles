@@ -45,7 +45,9 @@
       - ImageMagick
       - php
       - php-gd
+      - php-imap
       - php-intl
+      - php-mcrypt
       - php-mysqlnd
       - php-pecl-imagick
       - php-pecl-xdebug
