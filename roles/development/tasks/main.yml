@@ -30,14 +30,17 @@
     name: pycharm-community
     state: present
 
-- name: Download Atom
-  get_url:
-    url: https://atom.io/download/rpm
-    dest: /tmp/atom.rpm
-
+- name: Install Atom repo key
+  rpm_key:
+    key: "https://packagecloud.io/AtomEditor/atom/gpgkey"
+    state: present
+- name: Install Atom repository
+  copy:
+    content: "[Atom]\nname=Atom Editor\nbaseurl=https://packagecloud.io/AtomEditor/atom/el/7/\$basearch\nenabled=1\ngpgcheck=0\nrepo_gpgcheck=1\ngpgkey=https://packagecloud.io/AtomEditor/atom/gpgkey"
+    dest: /etc/yum.repos.d/atom.repo
 - name: Install Atom
   dnf:
-    name: /tmp/atom.rpm
+    name: atom
     state: present
 
 - name: Install android tools
