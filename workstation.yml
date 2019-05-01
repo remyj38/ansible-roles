@@ -72,6 +72,7 @@
           - inkscape
           - keepass
           - krita
+          - libgnome-keyring
           - libreoffice
           - libreoffice-langpack-fr
           - nextcloud-client
@@ -90,3 +91,13 @@
           - yubikey-personalization-gui
           - yubioath-desktop
         state: present
+    - name: Configure sensors
+      copy:
+        dest: "/etc/sensors.d/dell"
+        content: |
+          chip "dell_smm-virtual-0"
+            ignore temp4
+          chip "radeon-pci-0100"
+            ignore temp1
+
+
