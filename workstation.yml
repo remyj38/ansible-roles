@@ -100,4 +100,10 @@
           chip "radeon-pci-0100"
             ignore temp1
 
-
+    - name: Configure sudo
+      lineinfile:
+        dest: /etc/sudoers
+        state: present
+        regexp: '^%wheel'
+        line: '%wheel ALL=(ALL) ALL, NOPASSWD:/usr/bin/sed -i /nameserver 2001/d /etc/resolv.conf'
+        validate: 'visudo -cf %s'
