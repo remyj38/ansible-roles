@@ -1,12 +1,12 @@
 <VirtualHost *:80>
         ServerAdmin hostmaster@remyj.fr
-        ServerName www.idaarcclub.com
-        DocumentRoot /home/www/ida
+        ServerName admin.remyj.fr
+        DocumentRoot {{ httpd_data_dir }}/admin
         <Directory />
                 Options FollowSymLinks
                 AllowOverride None
         </Directory>
-        <Directory /home/www/html/ida/>
+        <Directory {{ httpd_data_dir }}/admin/>
                 Options FollowSymLinks MultiViews
                 AllowOverride All
                 Order allow,deny

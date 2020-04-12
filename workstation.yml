@@ -10,6 +10,8 @@
 
     - include_role:
         name: firefox
+      vars:
+        channel: beta-latest
 
     - include_role:
         name: firefox
@@ -31,6 +33,8 @@
         name:
           - aspell-fr
           - bash-completion
+          - cockpit
+          - cockpit-podman
           - dconf-editor
           - firewall-config
           - gconf-editor
@@ -44,14 +48,22 @@
           - net-tools
           - nethogs
           - nmap
-          - nmap-frontend
           - ntp
+          - setools-gui
           - smartmontools
+          - umit
           - usbutils
+          - util-linux-user
           - vim
-          - wireshark-gtk
+          - wireshark
           - zsh
         state: present
+
+    - name: Enable cockpit
+      systemd:
+        name: cockpit.socket
+        enabled: yes
+        state: started
 
     - name: Install Signal repository
       get_url:
@@ -91,19 +103,37 @@
           - yubikey-personalization-gui
           - yubioath-desktop
         state: present
-    - name: Configure sensors
+    - name: Fix sound on yoga
       copy:
-        dest: "/etc/sensors.d/dell"
-        content: |
-          chip "dell_smm-virtual-0"
-            ignore temp4
-          chip "radeon-pci-0100"
-            ignore temp1
+        dest: "/etc/modprobe.d/disable_dmic.conf"
+        content: "options snd_hda_intel dmic_detect=0"
 
-    - name: Configure sudo
-      lineinfile:
-        dest: /etc/sudoers
-        state: present
-        regexp: '^%wheel'
-        line: '%wheel ALL=(ALL) ALL, NOPASSWD:/usr/bin/sed -i /nameserver 2001/d /etc/resolv.conf'
-        validate: 'visudo -cf %s'
+    - name: Replace vi by vim
+      block:
+        - alternatives:
+            name: vi
+            link: /usr/local/bin/vi
+            path: /usr/bin/vi
+            priority: 100
+        - alternatives:
+            name: vi
+            link: /usr/local/bin/vi
+            path: /usr/bin/vim
+            priority: 900
+
+#    - name: Configure sensors
+#      copy:
+#        dest: "/etc/sensors.d/dell"
+#        content: |
+#          chip "dell_smm-virtual-0"
+#            ignore temp4
+#          chip "radeon-pci-0100"
+#            ignore temp1
+
+#    - name: Configure sudo
+#     lineinfile:
+#        dest: /etc/sudoers
+#        state: present
+#        regexp: '^%wheel'
+#        line: '%wheel ALL=(ALL) ALL, NOPASSWD:/usr/bin/sed -i /nameserver 2001/d /etc/resolv.conf'
+#        validate: 'visudo -cf %s'

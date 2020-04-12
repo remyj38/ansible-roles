@@ -1,7 +1,7 @@
 ---
 - name: Install Mega.nz repo
   dnf:
-    name: "https://mega.nz/linux/MEGAsync/Fedora_28/x86_64/megasync-Fedora_28.x86_64.rpm"
+    name: "https://mega.nz/linux/MEGAsync/Fedora_{{ hostvars[inventory_hostname].ansible_distribution_major_version }}/x86_64/megasync-Fedora_{{ hostvars[inventory_hostname].ansible_distribution_major_version }}.x86_64.rpm"
     state: present
 
 - name: Install mega for desktop

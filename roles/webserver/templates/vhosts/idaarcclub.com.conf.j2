@@ -1,16 +1,15 @@
 <VirtualHost *:80>
         ServerAdmin hostmaster@remyj.fr
-	servername etssi.dev.local
-        DocumentRoot /home/www/etssi.fr
+        ServerName www.idaarcclub.com
+        DocumentRoot {{ httpd_data_dir }}/ida
         <Directory />
-                Options FollowSymLinks Indexes
+                Options FollowSymLinks
                 AllowOverride All
         </Directory>
-        <Directory /home/www/etssi.fr>
-                Options FollowSymLinks MultiViews Indexes
+        <Directory {{ httpd_data_dir }}/html/ida/>
+                Options FollowSymLinks MultiViews
                 AllowOverride All
                 Order allow,deny
                 allow from all
         </Directory>
-        AssignUserId remy remy
 </VirtualHost>

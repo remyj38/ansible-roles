@@ -1,2 +1,4 @@
 ---
-postfix_relay: hermod.infra.remyj.fr
+httpd_data_dir: /home/www
+mariadb_data_dir: /home/mysql
+postfix_relay: hermod.intra.remyj.fr

@@ -1,47 +1,49 @@
 <VirtualHost *:80>
         ServerAdmin hostmaster@remyj.fr
-        DocumentRoot /home/www/html
-        ScriptAlias /cgi-bin/	/home/www/html/cgi-bin/
+        DocumentRoot {{ httpd_data_dir }}/html
+        ScriptAlias /cgi-bin/	{{ httpd_data_dir }}/html/cgi-bin/
 	Errorlog /var/log/httpd/default_err.log
 #	LogLevel warn rewrite:trace6
 	<Directory />
                 Options FollowSymLinks Indexes
-                AllowOverride None
+                AllowOverride All
         </Directory>
-        <Directory /home/www/html/>
+        <Directory {{ httpd_data_dir }}/html/>
                 Options FollowSymLinks MultiViews Indexes
                 AllowOverride All
                 Order allow,deny
                 allow from all
         </Directory>
-	<Directory /home/www/html/cgi-bin/>
+	<Directory {{ httpd_data_dir }}/html/cgi-bin/>
 		Options FollowSymLinks	Indexes	ExecCGI
-		AllowOverride None
+		AllowOverride All
 		Order deny,allow
 		Deny From All
 		Allow From 127
 	</Directory>
 	Alias /vpn /home/remy/Developpement/Dashboard_OpenVPN/src
+	Alias /blacklist /home/remy/Developpement/blacklist
+        AssignUserId remy remy
 #	<Location />
 #		ProxyPass http://initmanfs.dev.local/
 #	</location>
 </VirtualHost>
 <VirtualHost *:443>
 	ServerAdmin hostmaster@remyj.fr
-        DocumentRoot /home/www/html
-        ScriptAlias /cgi-bin/   /home/www/html/cgi-bin/
+        DocumentRoot {{ httpd_data_dir }}/html
+        ScriptAlias /cgi-bin/   {{ httpd_data_dir }}/html/cgi-bin/
         Errorlog /var/log/httpd/default_err.log
         <Directory />
                 Options FollowSymLinks Indexes
                 AllowOverride None
         </Directory>
-        <Directory /home/www/html/>
+        <Directory {{ httpd_data_dir }}/html/>
                 Options FollowSymLinks MultiViews Indexes
                 AllowOverride All
                 Order allow,deny
                 allow from all
         </Directory>
-        <Directory /home/www/html/cgi-bin/>
+        <Directory {{ httpd_data_dir }}/html/cgi-bin/>
                 Options FollowSymLinks  Indexes ExecCGI
                 AllowOverride None
                 Order deny,allow

@@ -3,3 +3,5 @@ install_path: /opt/firefox
 # Use devedition-latest for developer version, beta-latest for beta version and nightly-latest-l10n for nightly builds
 channel: latest
 language: fr
+owner: remy
+group: remy

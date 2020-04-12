@@ -1,16 +1,17 @@
 <VirtualHost *:80>
         ServerAdmin hostmaster@remyj.fr
-	servername api-ovh.dev.local
-        DocumentRoot /home/www/api-ovh
+	ServerName stages.local
+        DocumentRoot {{ httpd_data_dir }}/stages
         <Directory />
                 Options FollowSymLinks Indexes
                 AllowOverride All
+		Order Allow,Deny
+		Allow from all
         </Directory>
-        <Directory /home/www/api-ovh>
-                Options FollowSymLinks MultiViews Indexes
+        <Directory {{ httpd_data_dir }}/stages/>
+                Options FollowSymLinks MultiViews indexes
                 AllowOverride All
                 Order allow,deny
                 allow from all
         </Directory>
-        AssignUserId remy remy
 </VirtualHost>

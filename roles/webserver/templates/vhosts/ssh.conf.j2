@@ -1,14 +1,14 @@
 <VirtualHost *:80>
         ServerAdmin hostmaster@remyj.fr
-	ServerName stages.local
-        DocumentRoot /home/www/stages
+	ServerName ssh.local
+        DocumentRoot {{ httpd_data_dir }}/ssh_manager/src/
         <Directory />
                 Options FollowSymLinks Indexes
                 AllowOverride All
 		Order Allow,Deny
 		Allow from all
         </Directory>
-        <Directory /home/www/stages/>
+        <Directory {{ httpd_data_dir }}/ssh_manager/src/>
                 Options FollowSymLinks MultiViews indexes
                 AllowOverride All
                 Order allow,deny

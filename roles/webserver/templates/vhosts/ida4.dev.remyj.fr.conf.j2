@@ -1,16 +1,16 @@
 <VirtualHost *:80>
         ServerAdmin hostmaster@remyj.fr
-        ServerName iplookup.remyj.fr
-        DocumentRoot /home/remy/Developpement/iplookup.remyj.fr/
+        ServerName ida4.dev.remyj.fr
+        DocumentRoot /home/remy/Developpement/IDAArcClub_symfony4/public/
         <Directory />
                 Options FollowSymLinks
-                AllowOverride ALl
+                AllowOverride None
         </Directory>
-        <Directory /home/remy/Developpement/iplookup.remyj.fr/>
+        <Directory /home/remy/Developpement/IDAArcClub_symfony4/public/>
                 Options FollowSymLinks MultiViews
                 AllowOverride All
                 Order allow,deny
                 allow from all
         </Directory>
-        AssignUserId remy remy
+	AssignUserId remy remy
 </VirtualHost>

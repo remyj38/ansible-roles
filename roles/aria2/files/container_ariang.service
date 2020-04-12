@@ -1,0 +1,10 @@
+[Unit]
+Description=Aria_ng container
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/podman start -a aria_ng
+ExecStop=/usr/bin/podman stop -t 2 aria_ng
+
+[Install]
+WantedBy=local.target

@@ -1,7 +1,7 @@
 ---
 - name: Remove other version from repository
   dnf:
-    name: "firefox*"
+    name: "firefox"
     state: absent
 
 - name: Install dependencies
@@ -9,6 +9,7 @@
     name:
       - tar
       - bzip2
+      - chrome-gnome-shell
     state: present
 
 - name: Create temporary directory
@@ -34,10 +35,18 @@
     path: "{{ install_path }}"
     mode: +w
     recurse: yes
+    owner: "{{ owner }}"
+    group: "{{ group }}"
 
 - name: Create shortcut
   template:
     src: firefox.desktop.j2
-    dest: /usr/share/applications
+    dest: "/usr/share/applications/firefox-{{channel}}.desktop"
     owner: root
     group: root
+
+- name: Fix chrome-gnome-shell setup
+  file:
+    state: link
+    path: /usr/lib/mozilla/native-messaging-hosts
+    src: /usr/lib64/mozilla/native-messaging-hosts

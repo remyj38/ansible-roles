@@ -33,14 +33,23 @@
     enabled: yes
     state: started
 
-- name: Install web-ui
-  docker_container:
-    name: webui_aria2
-    image: timonier/webui-aria2
+- name: Remove old ariang
+  command: '/usr/bin/podman rm -f aria_ng'
+
+- name: Install ariang
+  command: '/usr/bin/podman run -e ARIA_PROTOCOL=ws -p 8080:80 -d --name aria_ng remyj38/ariang:stable-alpine'
+
+- name: Copy ariang service file
+  copy:
+    src: container_ariang.service
+    dest: /etc/systemd/system/container_ariang.service
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Enable ariang service
+  systemd:
+    name: container_ariang
+    daemon_reload: yes
+    enabled: yes
     state: started
-    env:
-      RCP_HOST: "172.17.0.1"
-    ports:
-      - "8080:80"
-    restart_policy: always
-  ignore_errors: true

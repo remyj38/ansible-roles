@@ -115,12 +115,12 @@ ServerName 0.0.0.0:80
 # documents. By default, all requests are taken from this directory, but
 # symbolic links and aliases may be used to point to other locations.
 #
-DocumentRoot "/home/www/html"
+DocumentRoot "{{ httpd_data_dir }}/html"
 
 #
 # Relax access to content within /var/www.
 #
-<Directory "/home/www/html">
+<Directory "{{ httpd_data_dir}}/html">
     AllowOverride all
     # Allow open access:
     Require all granted
@@ -128,7 +128,7 @@ DocumentRoot "/home/www/html"
 </Directory>
 
 # Further relax access to the default document root:
-<Directory "/home/www/html">
+<Directory "{{ httpd_data_dir}}/html">
     #
     # Possible values for the Options directive are "None", "All",
     # or any combination of:

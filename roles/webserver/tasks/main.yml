@@ -4,11 +4,33 @@
     name: mariadb-server
     state: present
 
+- name: Disable MariaDB service
+  systemd:
+    name: mariadb
+    state: stopped
+    enabled: no
+
+- name: Create MariaDB data directory
+  file:
+    path: "{{ mariadb_data_dir }}"
+    owner: mysql
+    group: mysql
+    state: directory
+
 - name: Configure MariaDB
   lineinfile:
     path: /etc/my.cnf.d/mariadb-server.cnf
     regexp: 'datadir='
-    line: 'datadir=/home/mysql'
+    line: "datadir={{ mariadb_data_dir }}"
+
+- name: Configure SELinux for new MariaDB data directory
+  sefcontext:
+    target: "{{ mariadb_data_dir }}(/.*)?"
+    setype: mysqld_db_t
+    state: present
+
+- name: Apply new SELinux file context to filesystem
+  command: "restorecon -irv {{ mariadb_data_dir }}"
 
 - name: Install httpd
   dnf:
@@ -18,9 +40,41 @@
       - mod_ssl
     state: present
 
+- name: Disable httpd service
+  systemd:
+    name: httpd
+    state: stopped
+    enabled: no
+
+- name: Create httpd data directory
+  file:
+    path: "{{ httpd_data_dir }}"
+    owner: apache
+    group: apache
+    state: directory
+
+- name: Configure SELinux for new httpd data directory
+  sefcontext:
+    target: "{{ httpd_data_dir }}(/.*)?"
+    setype: mysqld_db_t
+    state: present
+
+- name: Configure SELinux booleans
+  seboolean:
+    name: "{{ item.name }}"
+    state: "{{ item.value }}"
+    persistent: yes
+  with_items:
+    - {name: "httpd_can_network_connect", value: "yes"}
+    - {name: "httpd_can_sendmail", value: "yes"}
+    - {name: "httpd_execmem", value: "yes"}
+
+- name: Apply new SELinux file context to filesystem
+  command: "restorecon -irv {{ httpd_data_dir }}"
+
 - name: Configure httpd
-  copy:
-    src: httpd.conf
+  template:
+    src: httpd.conf.j2
     dest: /etc/httpd/conf/httpd.conf
     owner: root
     group: root
@@ -33,11 +87,21 @@
     line: 'LoadModule mpm_itk_module modules/mod_mpm_itk.so'
 
 - name: Configure httpd vhosts
-  copy:
-    src: vhosts
-    dest: /etc/httpd/vhosts
+  template:
+    src: "{{ item }}"
+    dest: /etc/httpd/vhosts/{{ item | basename | regex_replace('\.j2','') }}
     owner: root
     group: root
+  with_fileglob:
+    - ../templates/vhosts/*.j2
+
+- name: Use localhost certificate for all vhosts
+  lineinfile:
+    state: present
+    insertafter: '^</VirtualHost>'
+    line: |
+      SSLCertificateFile /etc/pki/tls/certs/localhost.crt
+      SSLCertificateKeyFile /etc/pki/tls/private/localhost.key
 
 - name: Install php
   dnf:
@@ -71,7 +135,7 @@
 
 - name: Configure phpMyAdmin
   template:
-    src: phpmyadmin.conf
+    src: phpmyadmin.conf.j2
     dest: /etc/phpMyAdmin/config.inc.php
     owner: root
     group: apache

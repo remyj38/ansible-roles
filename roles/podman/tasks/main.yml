@@ -1,0 +1,34 @@
+---
+- name: Remove docker
+  dnf:
+    name:
+      - docker
+      - docker-client
+      - docker-client-latest
+      - docker-common
+      - docker-latest
+      - docker-latest-logrotate
+      - docker-logrotate
+      - docker-selinux
+      - docker-engine-selinux
+      - docker-engine
+    state: absent
+
+- name: Install podman
+  dnf:
+    name: podman
+    state: present
+
+- name: Allow podman to manage cgroup
+  seboolean:
+    name: container_manage_cgroup
+    state: yes
+    persistent: yes
+
+- name: Create alias for docker command
+  copy:
+    dest: /etc/profile.d/00-podman.sh
+    content: 'alias docker=podman'
+    mode: 0555
+    owner: root
+    group: root

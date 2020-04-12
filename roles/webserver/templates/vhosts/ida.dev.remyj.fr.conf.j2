@@ -17,12 +17,12 @@
 <VirtualHost *:80>
         ServerAdmin hostmaster@remyj.fr
         ServerName ida-test.dev.remyj.fr
-        DocumentRoot /home/www/idaarcclub-prod/web/
+        DocumentRoot {{ httpd_data_dir }}/idaarcclub-prod/web/
         <Directory />
                 Options FollowSymLinks
                 AllowOverride None
         </Directory>
-        <Directory /home/www/idaarcclub-prod/web/>
+        <Directory {{ httpd_data_dir }}/idaarcclub-prod/web/>
                 Options FollowSymLinks MultiViews
                 AllowOverride All
                 Order allow,deny

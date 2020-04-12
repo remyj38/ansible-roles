@@ -1,12 +1,12 @@
 <VirtualHost *:80>
         ServerAdmin hostmaster@remyj.fr
         ServerName www.remyj.fr
-        DocumentRoot /home/www/html/cv
+        DocumentRoot {{ httpd_data_dir }}/html/cv
         <Directory />
                 Options FollowSymLinks
                 AllowOverride None
         </Directory>
-        <Directory /home/www/html/cv/>
+        <Directory {{ httpd_data_dir }}/html/cv/>
                 Options FollowSymLinks MultiViews
                 AllowOverride All
                 Order allow,deny
@@ -16,12 +16,12 @@
 <VirtualHost *:443>
         ServerAdmin hostmaster@remyj.fr
         ServerName www.remyj.fr
-        DocumentRoot /home/www/html/cv
+        DocumentRoot {{ httpd_data_dir }}/html/cv
         <Directory />
                 Options FollowSymLinks
                 AllowOverride None
         </Directory>
-        <Directory /home/www/html/cv/>
+        <Directory {{ httpd_data_dir }}/html/cv/>
                 Options FollowSymLinks MultiViews
                 AllowOverride All
                 Order allow,deny
