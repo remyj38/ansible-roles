@@ -48,7 +48,7 @@ Comment[pt]=Navegue na Internet
 Comment[pt_BR]=Navegue na Internet
 Comment[sk]=Prehliadanie internetu
 Comment[sv]=Surfa på webben
-Exec=env MOZ_USE_XINPUT2=1 {{ install_path }}/firefox %u
+Exec=env MOZ_USE_XINPUT2=1 MOZ_ENABLE_WAYLAND=1 {{ install_path }}/firefox %u
 Icon={{ install_path }}/browser/chrome/icons/default/default128.png
 Terminal=false
 Type=Application
@@ -62,9 +62,9 @@ X-Desktop-File-Install-Version=0.22
 
 [Desktop Action new-window]
 Name=Open a New Window
-Exec=env MOZ_USE_XINPUT2=1 {{ install_path }}/firefox %u
+Exec=env MOZ_USE_XINPUT2=1 MOZ_ENABLE_WAYLAND=1 {{ install_path }}/firefox %u
 
 [Desktop Action new-private-window]
 Name=Open a New Private Window
-Exec=env MOZ_USE_XINPUT2=1 {{ install_path }}/firefox --private-window %u
+Exec=env MOZ_USE_XINPUT2=1 MOZ_ENABLE_WAYLAND=1 {{ install_path }}/firefox --private-window %u
 
